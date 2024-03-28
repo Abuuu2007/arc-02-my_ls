@@ -1,93 +1,22 @@
-# My Ls
-This code is an implementation of a standard Unix utility that prints directory contents to standard output called *ls*.
+#include <stdio.h>    //c for printf
+#include <stdlib.h>   // for malloc и free
+#include <unistd.h>   // for write
+#include <sys/stat.h> // for stat и lstat
+#include <dirent.h>   // for opendir, closedir и readdir
+#include <stdbool.h>  // for bool
 
-The code was written by [Abdussamad Turdixojayev](https://github.com/Abuuu2007).
+typedef struct{
+    int int_val;
+    char *str_arr;
+} forSort;
 
-## Content
-- [Description](#description)
-- [Usage](#usage)
-- [Code Component](#code-component)
-- [Main function](#main-function)
-
-## Description
-I was given the task of creating My_Ls with two parameters:
-1. `-a` - Include directory entries whose names begin with a dot (.).
-2. `-t` - Sort by time modified (most recently modified first) before sorting the operands by lexicographical order.
-
-But with all this, I am allowed to use a limited number of functions, namely:
-
-* malloc(3)
-* free(3)
-* printf(3)
-* write(2)
-* stat(2)
-* lstat(2)
-* opendir(2)
-* closedir(2)
-* readdir(2)
-
-## Usage
-### The program will work depending on what parameters are used:
-#### If used without parameters:
-```
-$ ./my_ls
-Makefile 
-my_ls.c  
-my_ls.exe
-README.md
-```
----
-#### If `-a` is used, then hidden files starting with "." will also display:
-```
-$ ./my_ls -a
-.        
-..       
-Makefile 
-my_ls.c  
-my_ls.exe
-README.md
-```
----
-#### If `-t` is used, sorting by modification time will occur:
-```
-$ ./my_ls -t
-README.md
-my_ls.exe
-my_ls.c
-Makefile
-```
----
-#### You can enter these two parameters at the same time:
-```
-$ ./my_ls -at
-README.md
-.        
-Makefile 
-my_ls.c  
-my_ls.exe
-..
-```
----
-#### You can also select a directory in the console:
-```
-$ ./my_ls -at ..
-.
-my_ls
-.vscode
-..
-```
-## Code component
-### Analogous to `strlen`
-```c
 int my_strlen(char* p1){
     int i = 0;
     while(p1[i] != '\0')
         i++;
     return i;
 }
-```
-### Analogous to `strcmp`
-```c
+
 int my_strcmp(char* p1, char* p2){
     for(int i = 0; p1[i] != '\0' || p2[i] != '\0'; i++){
         if(p1[i] > p2[i])
@@ -97,9 +26,7 @@ int my_strcmp(char* p1, char* p2){
     }
     return 0;
 }
-```
-### Analogous to `strdup`
-```c
+
 char* my_strdup(char* p1){
     int len = my_strlen(p1);
     char* res = malloc((len + 1) * sizeof(char));
@@ -109,9 +36,7 @@ char* my_strdup(char* p1){
     res[i] = '\0';
     return res;
 }
-```
-### `BubbleSort` for sorting by modification time
-```c
+
 void bubble_sort(forSort* p1, int len){
     for(int i = 0; i < len; i++)
         for(int j = 0; j < len-i-1; j++)
@@ -124,9 +49,7 @@ void bubble_sort(forSort* p1, int len){
                 p1[j+1].str_arr = char_temp;
             }
 }
-```
-### Checking the entered parameters
-```c
+
 void param_check(int argc, char* argv[], bool* time_sort, bool* include_dot, char* dirs[], int* dirs_count){
     for(int i = 1; i < argc; i++){
         if(my_strcmp(argv[i], "-t") == 0)
@@ -142,9 +65,7 @@ void param_check(int argc, char* argv[], bool* time_sort, bool* include_dot, cha
         }
     }
 }
-```
-### Function printing directory contents
-```c
+
 int list_files(char* dirs, bool time_sort, bool include_dot){
     struct dirent *entry;
     struct stat fileStat;
@@ -191,9 +112,7 @@ int list_files(char* dirs, bool time_sort, bool include_dot){
 
     return 0;
 }
-```
-### Function containing main code
-```c
+
 int my_ls(int argc, char* argv[]){
     struct stat fileStat;
     bool time_sort = false;
@@ -219,11 +138,7 @@ int my_ls(int argc, char* argv[]){
     }
     return 0;
 }
-```
-## Main function
-### Here I return a function containing all the main code called `my_ls`:
-```c
+
 int main(int argc, char* argv[]){
     return my_ls(argc, argv);
-}
-```
+}   
