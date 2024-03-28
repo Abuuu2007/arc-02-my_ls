@@ -67,6 +67,7 @@ my_ls.c
 my_ls.exe
 ..
 ```
+---
 #### You can also select a directory in the console:
 ```
 $ ./my_ls -at ..
